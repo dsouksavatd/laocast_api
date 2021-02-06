@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class ExampleController extends Controller
 {
     public static $CODE = 200;
     public static $MESSAGE = "success";

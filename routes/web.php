@@ -29,6 +29,8 @@ $router->post('/signup', ['uses' => 'AuthController@signup']);
 $router->post('/signin', ['uses' => 'AuthController@signin']);
 $router->post('/reset-password', ['uses' => 'AuthController@resetPassword']);
 $router->post('/password-reset', ['uses' => 'AuthController@passwordReset']);
+$router->post('/email-verification-code/resend', ['uses' => 'AuthController@resendCode']);
+$router->patch('/email-verification', ['uses' => 'AuthController@emailVerification']);
 
 /**
  * Tracks

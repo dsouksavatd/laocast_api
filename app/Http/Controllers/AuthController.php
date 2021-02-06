@@ -13,6 +13,8 @@ use Client;
 use Exception;
 use Validator;
 use App\Models\PasswordResets;
+use App\Mail\EmailVerificationCode;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -198,20 +200,28 @@ class AuthController extends Controller
             $coreAuth = self::coreAuth(
                 $request->email, 
                 $request->password, 
-                $request->push_token, 
-                $request->login_method,
-                $request->platform,
-                $request->version
+                $request->device_brand,
+                $request->push_token,
+                $request->manufacturer,
+                $request->model_name,
+                $request->device_year,
+                $request->os_name,
+                $request->os_version,
+                $request->os_build_id,
+                $request->device_name,
+                $request->method,
+                $request->latitude,
+                $request->longitude
             );
 
             /* send verification email */
-            /* $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-            $beautymail->send('email.verification', $data, function($message) use ($request) {
-                $message
-                    ->from(env('NO_REPLY_EMAIL'))
-                    ->to($request->email, $request->name)
-                    ->subject(trans('email.email_verfication'));
-            }); */
+            Mail::to($request->email)->send(new EmailVerificationCode([
+                'name' => $user->name,
+                'target' => "#",
+                'action' => $code,
+                'content_start' => "Your email verification code is: ".$code,
+                'content_end' => false
+            ]));
 
             return response()->json([
                 'API_KEY' => $coreAuth['API_KEY'],
@@ -225,11 +235,9 @@ class AuthController extends Controller
     /**
      * Email Verification
      */
-    public function verification(Request $request) {
+    public function emailVerification(Request $request) {
 
-        app('translator')->setLocale($request->header('Content-Language'));
-
-        if($request->isMethod('POST')) {
+        if($request->isMethod('PATCH')) {
 
             /* Validate */
             $this->validate($request, [
@@ -238,7 +246,15 @@ class AuthController extends Controller
             ]);
             
             $user = User::where('email',$request->email)->first();
-                
+            
+            // If user already verified
+            if($user->email_verified_at) {
+                self::$CODE = 422;
+                return response()->json([
+                    'message' => trans('messages.error.email_is_already_verified'),
+                ], self::$CODE);
+            }
+
             /* Check Verify Code and expiry time */
             if($user->verify_code != $request->verification_code || strtotime($user->verify_code_expiry) < time() ) {
                 self::$MESSAGE = trans('messages.errors.invalid_verification_code');
@@ -320,8 +336,6 @@ class AuthController extends Controller
      */
     public function resendCode(Request $request) {
 
-        app('translator')->setLocale($request->header('Content-Language'));
-
         if($request->isMethod('POST')) {
 
             /* Validate */
@@ -331,6 +345,14 @@ class AuthController extends Controller
             
             $user = User::where('email', $request->email)->first();
            
+            // If user already verified
+            if($user->email_verified_at) {
+                self::$CODE = 422;
+                return response()->json([
+                    'message' => trans('messages.error.email_is_already_verified'),
+                ], self::$CODE);
+            }
+
             $code = mt_rand(100000, 999999);
             $data = [
                 'name' => $user->name,
@@ -342,13 +364,13 @@ class AuthController extends Controller
             $user->save();
 
             /* send verification email */
-            $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-            $beautymail->send('email.verification', $data, function($message) use ($user) {
-                $message
-                    ->from(env('NO_REPLY_EMAIL'))
-                    ->to($user->email, $user->name)
-                    ->subject(trans('email.email_verfication'));
-            });
+            Mail::to($request->email)->send(new EmailVerificationCode([
+                'name' => $user->name,
+                'target' => "#",
+                'action' => $code,
+                'content_start' => "Your email verification code is: ".$code,
+                'content_end' => false
+            ]));
 
             return response()->json([
                 'message' => trans('messages.success.verification_code_sent',['email' => $request->email]),
