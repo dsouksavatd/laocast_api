@@ -20,6 +20,7 @@ $router->get('/', function () use ($router) {
 /**
  * Initialize
  */
+$router->get('/initialize', ['uses' => 'InitController@initialize']);
 $router->get('/categories', ['uses' => 'CategoryController@index']);
 
 /**
@@ -27,6 +28,7 @@ $router->get('/categories', ['uses' => 'CategoryController@index']);
  */
 $router->post('/signup', ['uses' => 'AuthController@signup']);
 $router->post('/signin', ['uses' => 'AuthController@signin']);
+$router->post('/signin/social', ['uses' => 'AuthController@signinSocial']);
 $router->post('/reset-password', ['uses' => 'AuthController@resetPassword']);
 $router->post('/password-reset', ['uses' => 'AuthController@passwordReset']);
 $router->post('/email-verification-code/resend', ['uses' => 'AuthController@resendCode']);
@@ -46,3 +48,15 @@ $router->patch('/track/favorite', ['uses' => 'TrackController@favorite']);
  * Channels
  */
 $router->patch('/channel/subscribe', ['uses' => 'ChannelController@subscribe']);
+
+/**
+ * User
+ */
+$router->get('/profile', ['uses' => 'UserController@profile']);
+$router->post('/profile-picture-upload', ['uses' => 'UserController@profilePictureUpload']);
+$router->delete('/profile-picture-remove', ['uses' => 'UserController@removeProfilePicture']);
+$router->patch('/profile-update', ['uses' => 'UserController@profileUpdate']);
+$router->patch('/change-password', ['uses' => 'UserController@changePassword']);
+$router->get('/subscription', ['uses' => 'UserController@subscription']);
+$router->get('/history', ['uses' => 'UserController@history']);
+$router->get('/favorite', ['uses' => 'UserController@favorite']);

@@ -24,7 +24,7 @@ class TrackController extends Controller
     public function __construct(Request $request) {
 
         app('translator')->setLocale($request->header('Content-Language'));
-        $this->middleware('auth', [
+        $this->middleware('auth:api', [
             'except' => [
                 'recent',
                 'find',

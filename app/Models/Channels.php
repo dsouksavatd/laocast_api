@@ -12,5 +12,10 @@ class Channels extends Model
     /**
      * 
      */
-    
+    public function Tracks() {
+        return $this->hasMany(Tracks::class, 'channels_id', 'id')
+            ->where('publish', 1)
+            ->orderBy('id', 'DESC')
+            ->limit(5);
+    }
 }

@@ -28,6 +28,23 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $hidden = [
+        'id',
         'password',
+        "email_verified_at",
+        "two_factor_secret",
+        "two_factor_recovery_codes",
+        "remember_token",
+        "current_team_id",
+        "verify_code",
+        "verify_code_expiry",
+        "updated_at"
     ];
+
+    /**
+     * 
+     */
+    public function Notifications() {
+        return $this->hasMany(Notifications::class, 'users_id', 'id')->where('read', 0);
+    }
+
 }

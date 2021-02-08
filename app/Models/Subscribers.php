@@ -11,5 +11,8 @@ class Subscribers extends Model
     /**
      * 
      */
+    public function Channels() {
+        return $this->hasOne(Channels::class, 'id', 'channels_id');
+    }
     
 }

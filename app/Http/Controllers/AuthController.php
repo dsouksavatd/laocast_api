@@ -13,7 +13,7 @@ use Client;
 use Exception;
 use Validator;
 use App\Models\PasswordResets;
-use App\Mail\EmailVerificationCode;
+use App\Mail\MailTemplate;
 use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
@@ -30,7 +30,7 @@ class AuthController extends Controller
     {
         app('translator')->setLocale($request->header('Content-Language'));
 
-        $this->middleware('auth', [
+        $this->middleware('auth:api', [
             'except' => [
                 'signup',
                 'signin',
@@ -40,7 +40,7 @@ class AuthController extends Controller
             ]
         ]);
     }
-
+    
     /**
      * Core Authentication
      */
@@ -140,14 +140,16 @@ class AuthController extends Controller
                 $user->verify_code_expiry = date('Y-m-d H:i:s', time()+86400);
                 $user->save();
 
-                /* send verification email */
-               /*  $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                $beautymail->send('email.verification', $data, function($message) use ($request) {
-                    $message
-                        ->from(env('NO_REPLY_EMAIL'))
-                        ->to($request->email, $request->name)
-                        ->subject(trans('email.email_verfication'));
-                }); */
+               /* send verification email */
+                $subject = trans('app.email.email_verification.subject');
+                $body = trans('app.email.email_verification.body', ['code' => $code]);
+                Mail::to($request->email)->send(new MailTemplate($subject, [
+                    'name' => $user->name,
+                    'target' => "#",
+                    'action' => false,
+                    'body' => $body,
+                    'footer' => false
+                ]));
             }
 
             return response()->json([
@@ -215,12 +217,14 @@ class AuthController extends Controller
             );
 
             /* send verification email */
-            Mail::to($request->email)->send(new EmailVerificationCode([
+            $subject = trans('app.email.email_verification.subject');
+            $body = trans('app.email.email_verification.body', ['code' => $code]);
+            Mail::to($request->email)->send(new MailTemplate($subject, [
                 'name' => $user->name,
                 'target' => "#",
-                'action' => $code,
-                'content_start' => "Your email verification code is: ".$code,
-                'content_end' => false
+                'action' => false,
+                'body' => $body,
+                'footer' => false
             ]));
 
             return response()->json([
@@ -317,10 +321,18 @@ class AuthController extends Controller
             $coreAuth = self::coreAuth(
                 $request->email, 
                 $request->password, 
-                $request->push_token, 
-                $request->login_method,
-                $request->platform,
-                $request->version
+                $request->device_brand,
+                $request->push_token,
+                $request->manufacturer,
+                $request->model_name,
+                $request->device_year,
+                $request->os_name,
+                $request->os_version,
+                $request->os_build_id,
+                $request->device_name,
+                $request->method,
+                $request->latitude,
+                $request->longitude
             );
             
             return response()->json([
@@ -364,12 +376,14 @@ class AuthController extends Controller
             $user->save();
 
             /* send verification email */
-            Mail::to($request->email)->send(new EmailVerificationCode([
+            $subject = trans('app.email.email_verification.subject');
+            $body = trans('app.email.email_verification.body', ['code' => $code]);
+            Mail::to($request->email)->send(new MailTemplate($subject, [
                 'name' => $user->name,
                 'target' => "#",
-                'action' => $code,
-                'content_start' => "Your email verification code is: ".$code,
-                'content_end' => false
+                'action' => false,
+                'body' => $body,
+                'footer' => false
             ]));
 
             return response()->json([
@@ -406,13 +420,15 @@ class AuthController extends Controller
             $passwordResets->save();
 
             /* send reset code email */
-            /* $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-            $beautymail->send('email.password_reset', $data, function($message) use ($user) {
-                $message
-                    ->from(env('NO_REPLY_EMAIL'))
-                    ->to($user->email, $user->name)
-                    ->subject(trans('email.reset_password'));
-            }); */
+            $subject = trans('app.email.password_reset.subject');
+            $body = trans('app.email.password_reset.body', ['code' => $code]);
+            Mail::to($request->email)->send(new MailTemplate($subject, [
+                'name' => $user->name,
+                'target' => "#",
+                'action' => false,
+                'body' => $body,
+                'footer' => false
+            ]));
 
             return response()->json([
                 'message' => trans('messages.success.password_reset_code_sent',['email' => $request->email]),
@@ -424,8 +440,6 @@ class AuthController extends Controller
      * Password Reset
      */
     public function passwordReset(Request $request) {
-
-        app('translator')->setLocale($request->header('Content-Language'));
 
         if($request->isMethod('POST')) {
 
@@ -459,17 +473,19 @@ class AuthController extends Controller
 
             PasswordResets::where('email', $request->email)->delete();
 
-            /* send reset code email */
-            /* $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-            $beautymail->send('email.password_changed', $data, function($message) use ($user) {
-                $message
-                    ->from(env('NO_REPLY_EMAIL'))
-                    ->to($user->email, $user->name)
-                    ->subject(trans('email.password_changed'));
-            }); */
+            /* send password reset confirmation email */
+            $subject = trans('app.email.password_changed.subject');
+            $body = trans('app.email.password_changed.body', ['email' => $user->email]);
+            Mail::to($request->email)->send(new MailTemplate($subject, [
+                'name' => $user->name,
+                'target' => "#",
+                'action' => false,
+                'body' => $body,
+                'footer' => false
+            ]));
 
             return response()->json([
-                'message' => trans('messages.success.password_changed',['email' => $request->email]),
+                'message' => $body,
             ], self::$CODE);
         }
     }
