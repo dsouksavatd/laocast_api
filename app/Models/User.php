@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
+use Auth;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
@@ -28,7 +29,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $hidden = [
-        'id',
+
         'password',
         "email_verified_at",
         "two_factor_secret",
@@ -47,4 +48,56 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasMany(Notifications::class, 'users_id', 'id')->where('read', 0);
     }
 
+    /**
+     * 
+     */
+    public function pushNotify($param, $sound = false) {
+
+        // user should not notify for commen/subscrib their own data 
+        if($this->id != Auth::id()) { 
+
+            // add notification record
+            $notify = new Notifications();
+            $notify->users_id = $this->id;
+            $notify->type = $param['type'];
+            $notify->scheme = json_encode([
+                'avatar' => $this->profile_photo_path,
+                'description' => $param['body'],
+            ],JSON_UNESCAPED_SLASHES);
+            $notify->save();
+           
+            // check if user enable notification
+            if($this->notification) {
+                $pushTokens = app('db')->select("
+                    SELECT push_token
+                    FROM oauth_access_tokens
+                    WHERE user_id = ".$this->id."
+                    AND revoked = 0
+                    AND push_token != ''
+                    GROUP BY push_token
+                ");
+                $expo = \ExponentPhpSDK\Expo::normalSetup();
+                $channelName = env('APP_NAME').'_ExpoPushChannel';
+
+                try {
+                    if($pushTokens) {
+                        foreach($pushTokens as $token) {
+                            $expo->subscribe($channelName, $token->push_token);
+                            $notification = [
+                                'title' => $param['title'], 
+                                'body' => $param['body'],
+                            ];
+                            if($sound) {
+                                $notification = array_merge($notification, ['sound'=>'default']);
+                            }
+                        }
+                        $expo->notify([$channelName], $notification);
+                    }
+                } catch(Exception $e) {
+                    return 'Caught exception: '. $e->getMessage();
+                } 
+            }
+        }
+        
+    }
 }

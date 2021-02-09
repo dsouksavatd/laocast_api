@@ -285,4 +285,120 @@ class UserController extends Controller
             'data' => $data
         ], self::$CODE);
     }
+
+    /**
+     * 
+     */
+    public function notifications() {
+        $data  = app('db')->select("
+            SELECT
+            notifications.id as id,
+            notifications.type as type,
+            notifications.scheme as scheme,
+            notifications.read as `read`,
+            notifications.created_at as created_at
+            FROM notifications
+            JOIN users ON users.id = notifications.users_id
+            WHERE notifications.users_id = ".Auth::id()."
+            ORDER BY notifications.created_at DESC
+        ");
+
+        return response()->json([
+            'userNotification' => Auth::user()->notification,
+            'data' => $data
+        ], self::$CODE);
+    }
+    
+    /**
+     * 
+     */
+    public function notificationUpdate(Request $request) {
+        if($request->isMethod('PATCH')) {
+
+            /* Validate */
+            $this->validate($request, [
+                'notifications_id' => 'required|numeric',
+            ]);
+
+            /* update record */
+            app('db')->select("
+                UPDATE notifications
+                SET `read` = 1
+                WHERE notifications.users_id = ".Auth::id()."
+                AND notifications.id = ".$request->notifications_id."
+            ");
+
+            /* count remain notifications */
+            $notification = app('db')->select("
+                SELECT 
+                count(id) as count
+                FROM notifications
+                WHERE notifications.users_id = ".Auth::id()."
+                AND notifications.`read` = 0
+            ")[0]->count;
+
+            return response()->json([
+                'notifications' => $notification
+            ], self::$CODE);
+        }
+    }
+
+    /**
+     * 
+     */
+    public function notificationMarkAsRead() {
+        /* update all record */
+        app('db')->select("
+            UPDATE notifications
+            SET `read` = 1
+            WHERE notifications.users_id = ".Auth::id()."
+        ");
+
+        $data  = app('db')->select("
+            SELECT
+            notifications.id as id,
+            notifications.type as type,
+            notifications.scheme as scheme,
+            notifications.read as `read`,
+            notifications.created_at as created_at
+            FROM notifications
+            JOIN users ON users.id = notifications.users_id
+            WHERE notifications.users_id = ".Auth::id()."
+            ORDER BY notifications.created_at DESC
+        ");
+
+        return response()->json([
+            'data' => $data,
+            'notifications' => 0
+        ], self::$CODE);
+    }
+
+    /**
+     * 
+     */
+    public function notificationClear() {
+        /* delete all records */
+        app('db')->select("
+            DELETE FROM notifications
+            WHERE notifications.users_id = ".Auth::id()."
+        ");
+
+        return response()->json([
+            'notifications' => 0
+        ], self::$CODE);
+    }
+
+    /**
+     * 
+     */
+    public function notificationOffon() {
+        /* delete all records */
+        $user = Auth::user();
+        $user->notification = $user->notification == 1 ? 0 : 1;
+        $user->save();
+
+        return response()->json([
+            'userNotification' => $user->notification
+        ], self::$CODE);
+    }
 }

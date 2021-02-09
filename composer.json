@@ -6,7 +6,9 @@
     "type": "project",
     "require": {
         "php": "^7.3|^8.0",
+        "alymosul/exponent-server-sdk-php": "^1.2",
         "illuminate/mail": "^8.26",
+        "laravel-notification-channels/telegram": "^0.5.1",
         "laravel/lumen-framework": "^8.0"
     },
     "require-dev": {

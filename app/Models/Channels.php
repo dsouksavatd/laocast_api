@@ -18,4 +18,12 @@ class Channels extends Model
             ->orderBy('id', 'DESC')
             ->limit(5);
     }
+
+    /**
+     * 
+     */
+    public function User() {
+        return $this->hasOne(User::class, 'id', 'users_id');
+    }
+
 }

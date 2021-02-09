@@ -42,6 +42,8 @@ class InitController extends Controller
 
         return response()->json([
             'data' => [
+                'facebook' => env('FACEBOOK'),
+                'mobile' => env('MOBILE'),
                 'notifications' => $notifications,
                 'version' => env('APP_VERSION'),
                 'updateLinkAndroid' => env('UPDATE_LINK_ANDROID'),

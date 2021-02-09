@@ -59,5 +59,23 @@ return [
         'password_changed' => 'The password for the Laocast account :email was just changed',
         'ticket_sent' => 'Ticket :name has been sent to :account successfully.',
         'support_message' => 'Your message has been sent'
+    ],
+
+    /**
+     * 
+     */
+    'push_notification' => [
+        'subscribe' => [
+            'title' => 'You have new subscriber!',
+            'body' => '":name" is now subscribe to your channel ":channel"'
+        ],
+        'favorite' => [
+            'title' => 'You have new favorite',
+            'body' => '":name" is put ":track" to their favorites'
+        ],
+        'comment' => [
+            'title' => 'You have new comment',
+            'body' => '":name" has comment on ":track"'
+        ]
     ]
 ];

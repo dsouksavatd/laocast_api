@@ -38,7 +38,7 @@ class ChannelController extends Controller
                 'channels_id' => 'required|numeric'
             ]);
             
-            $channel = Channels::select('id','name','image','subscribers')
+            $channel = Channels::select('id','name','image','subscribers','users_id')
                             ->find($request->channels_id);
 
             $subscriber = Subscribers::where('channels_id', $request->channels_id)
@@ -56,6 +56,18 @@ class ChannelController extends Controller
                 $subscriber->save();
                 self::$MESSAGE = 'subscribed';
                 $channel->increment('subscribers');
+
+                // Push Notify
+                $title = trans('app.push_notification.subscribe.title');
+                $body = trans('app.push_notification.subscribe.body', [
+                    'name' => Auth::user()->name,
+                    'channel' => $channel->name
+                ]);
+                $channel->User->pushNotify([
+                    'type' => 'subscribe',
+                    'title' => $title,
+                    'body' => $body
+                ], false);
             }
 
             return response()->json([
