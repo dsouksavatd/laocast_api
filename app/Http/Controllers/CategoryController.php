@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use App\Models\Categories;
 
 class CategoryController extends Controller
 {
@@ -16,6 +17,7 @@ class CategoryController extends Controller
     public function __construct(Request $request) {
 
         app('translator')->setLocale($request->header('Content-Language'));
+
         $this->middleware('auth:api', [
             'except' => [
                 'index'
@@ -29,7 +31,9 @@ class CategoryController extends Controller
      */
     public function index() {
 
-        $data = app('db')->select("SELECT id,name,image,count FROM categories WHERE deleted_at IS NULL");
+        //$data = app('db')->select("SELECT id,name,image,count FROM categories WHERE deleted_at IS NULL");
+        $data = Categories::select('id','name','image','count')->get();
+        
         return response()->json([
             'data' => $data
         ],self::$CODE);

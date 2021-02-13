@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
+use App\Models\Ads;
 
 class InitController extends Controller
 {
@@ -40,15 +41,24 @@ class InitController extends Controller
             ")[0]->count;
         }
 
+        /** ADS */
+        $adsData = Ads::select('link','type','image','banner')->get();
+        $ads = $adsData->pluck('banner');
+        $adsSet = $adsData;
+
+        $data = [
+            'facebook' => env('FACEBOOK'),
+            'mobile' => env('MOBILE'),
+            'notifications' => $notifications,
+            'version' => env('APP_VERSION'),
+            'updateLinkAndroid' => env('UPDATE_LINK_ANDROID'),
+            'updateLinkiOS' => env('UPDATE_LINK_iOS'),
+            'ads' => $ads,
+            'adsSet' => $adsSet
+        ];
+
         return response()->json([
-            'data' => [
-                'facebook' => env('FACEBOOK'),
-                'mobile' => env('MOBILE'),
-                'notifications' => $notifications,
-                'version' => env('APP_VERSION'),
-                'updateLinkAndroid' => env('UPDATE_LINK_ANDROID'),
-                'updateLinkiOS' => env('UPDATE_LINK_iOS')
-            ]
+            'data' => $data
         ], self::$CODE);
     }
 

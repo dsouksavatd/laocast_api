@@ -37,17 +37,25 @@ $router->patch('/email-verification', ['uses' => 'AuthController@emailVerificati
 /**
  * Tracks
  */
-$router->get('/track/recent', ['uses' => 'TrackController@recent']);
+$router->get('/track/recent/{_offset}/{_limit}', ['uses' => 'TrackController@recent']);
+$router->get('/track/subscription/{_offset}/{_limit}', ['uses' => 'TrackController@subscription']);
+$router->get('/track/popular/{_offset}/{_limit}', ['uses' => 'TrackController@popular']);
 $router->get('/track/find/{trackId}/{latitude}/{longitude}', ['uses' => 'TrackController@find']);
 $router->get('/track/public/comments/find/{trackId}', ['uses' => 'TrackController@findPublicComments']);
 $router->get('/track/comments/find/{trackId}', ['uses' => 'TrackController@findComments']);
 $router->post('/track/comment/post', ['uses' => 'TrackController@postComment']);
 $router->patch('/track/favorite', ['uses' => 'TrackController@favorite']);
+$router->get('/track/search/{_keyword}/{_offset}/{_limit}', ['uses' => 'TrackController@search']);
+$router->get('/track/category/{_id}/{_offset}/{_limit}', ['uses' => 'TrackController@category']);
+
 
 /**
  * Channels
  */
 $router->patch('/channel/subscribe', ['uses' => 'ChannelController@subscribe']);
+$router->get('/subscribers/{channels_id}', ['uses' => 'ChannelController@subscribers']);
+$router->get('/channel/popular/{_offset}/{_limit}', ['uses' => 'ChannelController@popular']);
+$router->get('/channel/recent/{_offset}/{_limit}', ['uses' => 'ChannelController@recent']);
 
 /**
  * User
@@ -65,3 +73,14 @@ $router->patch('/notification-update', ['uses' => 'UserController@notificationUp
 $router->patch('/notification/mark-as-read', ['uses' => 'UserController@notificationMarkAsRead']);
 $router->delete('/notification/clear', ['uses' => 'UserController@notificationClear']);
 $router->patch('/notification/offon', ['uses' => 'UserController@notificationOffon']);
+
+/**
+ * Sponsor
+ */
+$router->get('/sponsors/{channels_id}', ['uses' => 'SponsorController@sponsors']);
+$router->get('/sponsor/menu', ['uses' => 'SponsorController@index']);
+
+/**
+ * Payment
+ */
+$router->post('/op-gen', ['uses' => 'PaymentController@generateOnePayQrCode']);

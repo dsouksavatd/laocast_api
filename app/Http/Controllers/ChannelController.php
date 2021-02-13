@@ -21,7 +21,10 @@ class ChannelController extends Controller
         app('translator')->setLocale($request->header('Content-Language'));
         $this->middleware('auth:api', [
             'except' => [
-                'index'
+                'index',
+                'popular',
+                'subscribers',
+                'recent'
             ]
         ]);
     }
@@ -65,6 +68,7 @@ class ChannelController extends Controller
                 ]);
                 $channel->User->pushNotify([
                     'type' => 'subscribe',
+                    'target_id' => $channel->id,
                     'title' => $title,
                     'body' => $body
                 ], false);
@@ -75,6 +79,90 @@ class ChannelController extends Controller
                 'message' => self::$MESSAGE
             ], self::$CODE);
         }
+    }
+
+    /**
+     * 
+     */
+    public function subscribers($channels_id) {
+        
+        $data = app('db')->select("
+            SELECT
+            users.name as name,
+            users.profile_photo_path as avatar,
+            subscribers.created_at as created_at
+            FROM subscribers
+            JOIN users ON users.id = subscribers.users_id
+            JOIN channels ON channels.id = subscribers.channels_id
+            WHERE subscribers.channels_id = ".$channels_id."
+            ORDER BY subscribers.id DESC
+            LIMIT 0,30
+        ");
+
+        $total = app('db')->select("
+            SELECT count(id) as total
+            FROM subscribers
+            WHERE subscribers.channels_id = ".$channels_id."
+        ")[0]->total;
+
+        return response()->json([
+            'subscriberList' => $data,
+            'subscriberTotal' => $total
+        ], self::$CODE);
+    }
+
+    /**
+     * 
+     */
+    public function popular($_offset, $_limit) {
+
+        $data = app('db')->select("
+            SELECT
+            MIN(tracks.id) as id,
+            channels.name as channel,
+            channels.subscribers as subscribers,
+            channels.image as image,
+            MIN(tracks.name) as `name`,
+            MIN(tracks.track) as track,
+            MIN(tracks.duration) as duration,
+            COUNT(tracks.id) as totalTracks
+            FROM channels
+            JOIN tracks ON tracks.channels_id = channels.id
+            WHERE channels.publish = 1
+            GROUP BY channels.id
+            ORDER BY channels.subscribers DESC
+            LIMIT ".$_offset.",".$_limit."
+        ");
+        return response()->json([
+            'data' => $data
+        ],self::$CODE);
+    }
+
+    /**
+     * 
+     */
+    public function recent($_offset, $_limit) {
+
+        $data = app('db')->select("
+            SELECT
+            MIN(tracks.id) as id,
+            channels.name as channel,
+            channels.subscribers as subscribers,
+            channels.image as image,
+            MIN(tracks.name) as `name`,
+            MIN(tracks.track) as track,
+            MIN(tracks.duration) as duration,
+            COUNT(tracks.id) as totalTracks
+            FROM channels
+            JOIN tracks ON tracks.channels_id = channels.id
+            WHERE channels.publish = 1
+            GROUP BY channels.id
+            ORDER BY channels.id DESC
+            LIMIT ".$_offset.",".$_limit."
+        ");
+        return response()->json([
+            'data' => $data
+        ],self::$CODE);
     }
 
 }

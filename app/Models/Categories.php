@@ -15,4 +15,11 @@ class Categories extends Model
         'deleted_at'
     ];
 
+    /**
+     * 
+     */
+    public function getNameAttribute($value) {
+        return trans('app.categories.'.$value);
+    }
+
 }

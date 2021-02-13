@@ -13,7 +13,7 @@ return [
      * Categories
      */
     'categories' => [
-        'art_and_education' => 'Art & Education',
+        'art_and_education' => 'ສິນລະປະ ແລະ ການສືກສາ',
         'business' => 'Business',
         'history' => 'History',
         'fiction_and_stories' => 'Fiction & Stories',

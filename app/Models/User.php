@@ -63,6 +63,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             $notify->scheme = json_encode([
                 'avatar' => $this->profile_photo_path,
                 'description' => $param['body'],
+                'target_id' => $param['target_id']
             ],JSON_UNESCAPED_SLASHES);
             $notify->save();
            

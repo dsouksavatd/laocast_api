@@ -28,7 +28,10 @@ class TrackController extends Controller
             'except' => [
                 'recent',
                 'find',
-                'findPublicComments'
+                'findPublicComments',
+                'subscription',
+                'popular',
+                'search'
             ]
         ]);
     }
@@ -36,7 +39,7 @@ class TrackController extends Controller
     /**
      * 
      */
-    public function recent() {
+    public function recent($_offset, $_limit) {
 
         $data = app('db')->select("
             SELECT 
@@ -52,6 +55,97 @@ class TrackController extends Controller
             JOIN channels ON channels.id = tracks.channels_id
             WHERE tracks.publish = 1 AND tracks.deleted_at IS NULL   
             ORDER BY id DESC
+            LIMIT ".$_offset.",".$_limit."
+        ");
+        return response()->json([
+            'data' => $data
+        ],self::$CODE);
+    }
+
+    /**
+     * 
+     */
+    public function subscription($_offset, $_limit) {
+
+        $data = [];
+
+        if(Auth::id()) {
+            $data = app("db")->select("
+                SELECT
+                tracks.id as id,
+                channels.name as channel,
+                channels.image as image,
+                tracks.name as name,
+                tracks.duration as duration,
+                tracks.views as views,
+                tracks.duration as duration,
+                tracks.favorites as favorites
+                FROM tracks
+                JOIN channels ON channels.id = tracks.channels_id
+                WHERE tracks.channels_id IN (
+                    SELECT channels_id FROM subscribers WHERE users_id = ".Auth::id()."
+                )
+                AND tracks.publish = 1
+                AND tracks.deleted_at IS NULL
+                ORDER BY tracks.created_at DESC
+                LIMIT ".$_offset.",".$_limit."
+            ");
+        }
+    
+        return response()->json([
+            'data' => $data
+        ],self::$CODE);
+    }
+
+    /**
+     * 
+     */
+    public function popular($_offset, $_limit) {
+
+        $data = app('db')->select("
+            SELECT
+            tracks.id as id,
+            channels.name as channel,
+            channels.image as image,
+            tracks.name as name,
+            tracks.duration as duration,
+            tracks.views as views,
+            tracks.duration as duration,
+            tracks.favorites as favorites
+            FROM tracks
+            JOIN channels ON channels.id = tracks.channels_id
+            WHERE tracks.publish = 1
+            AND tracks.deleted_at IS NULL
+            ORDER BY tracks.views DESC
+            LIMIT ".$_offset.", ".$_limit."
+        ");
+        return response()->json([
+            'data' => $data
+        ],self::$CODE);
+    }
+
+    /**
+     * 
+     */
+    public function search($_keyword, $_offset, $_limit) {
+
+        $data = app('db')->select("
+            SELECT
+            tracks.id as id,
+            channels.name as channel,
+            channels.image as image,
+            tracks.name as name,
+            tracks.duration as duration,
+            tracks.views as views,
+            tracks.duration as duration,
+            tracks.favorites as favorites
+            FROM tracks
+            JOIN channels ON channels.id = tracks.channels_id
+            WHERE tracks.publish = 1
+            AND tracks.deleted_at IS NULL
+            AND tracks.keywords LIKE '%".$_keyword."%'
+            ORDER BY tracks.views DESC
+            LIMIT ".$_offset.", ".$_limit."
         ");
         return response()->json([
             'data' => $data
@@ -86,7 +180,8 @@ class TrackController extends Controller
             channels.id as id, 
             channels.`name` as name,
             channels.image as image,
-            channels.subscribers as subscribers
+            channels.subscribers as subscribers,
+            channels.created_at as created_at
             FROM channels
             WHERE channels.id = ".$track->channels_id."
             AND channels.deleted_at IS NULL
@@ -238,7 +333,7 @@ class TrackController extends Controller
             track_comments.created_at as created_at
             FROM track_comments
             JOIN users ON users.id = track_comments.users_id
-            AND track_comments.deleted_at IS NULL   
+            WHERE track_comments.deleted_at IS NULL   
             AND track_comments.tracks_id = ".$trackId."
             ORDER BY id DESC
         ");
@@ -264,7 +359,7 @@ class TrackController extends Controller
             track_comments.created_at as created_at
             FROM track_comments
             JOIN users ON users.id = track_comments.users_id
-            AND track_comments.deleted_at IS NULL   
+            WHERE track_comments.deleted_at IS NULL   
             AND track_comments.tracks_id = ".$trackId."
             ORDER BY id DESC
         ");
@@ -272,6 +367,34 @@ class TrackController extends Controller
         return response()->json([
             'profile_photo_path' => '',
             'data' => $comments
+        ],self::$CODE);
+    }
+
+    /**
+     * 
+     */
+    public function category($_id, $_offset, $_limit) {
+
+        $data = app('db')->select("
+            SELECT
+            tracks.id as id,
+            channels.name as channel,
+            channels.image as image,
+            tracks.name as name,
+            tracks.duration as duration,
+            tracks.views as views,
+            tracks.duration as duration,
+            tracks.favorites as favorites
+            FROM tracks
+            JOIN channels ON channels.id = tracks.channels_id
+            WHERE tracks.categories_id = ".$_id."
+            AND tracks.publish = 1
+            AND tracks.deleted_at IS NULL
+            ORDER BY tracks.id DESC
+            LIMIT ".$_offset.", ".$_limit."
+        ");
+        return response()->json([
+            'data' => $data
         ],self::$CODE);
     }
 
@@ -309,6 +432,7 @@ class TrackController extends Controller
             ]);
             $track->User->pushNotify([
                 'type' => 'comment',
+                'target_id' => $track->id,
                 'title' => $title,
                 'body' => $body
             ], true);
@@ -367,6 +491,7 @@ class TrackController extends Controller
                 ]);
                 $track->User->pushNotify([
                     'type' => 'favorite',
+                    'target_id' => $track->id,
                     'title' => $title,
                     'body' => $body
                 ], false);
