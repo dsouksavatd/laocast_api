@@ -81,6 +81,8 @@ class AuthController extends Controller
         ));
 
         $response = curl_exec($curl);
+        dump($response);
+        exit();
         curl_close($curl);
         return ['response' => $response, 'API_KEY' => $API_KEY];
     }
