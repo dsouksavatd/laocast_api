@@ -102,7 +102,7 @@
         <td class="container" style="font-family: sans-serif; font-size: 14px; vertical-align: top; display: block; Margin: 0 auto; max-width: 580px; padding: 10px; width: 580px;">
           <div class="content" style="box-sizing: border-box; display: block; Margin: 0 auto; max-width: 580px; padding: 10px;">
     
-            <img src="http://images.laocast.com/logo-email.png" style="display: block;
+            <img src="https://images.laocast.com/logo-email.png" style="display: block;
             margin-left: auto;
             margin-right: auto; width: 130px; height: 130"/>
             <!-- START CENTERED WHITE CONTAINER -->
