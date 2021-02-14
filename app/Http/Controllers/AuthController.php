@@ -79,7 +79,7 @@ class AuthController extends Controller
                 'longitude' => $longitude
             )
         ));
-        
+
         $response = curl_exec($curl);
         curl_close($curl);
         return ['response' => $response, 'API_KEY' => $API_KEY];
@@ -313,6 +313,10 @@ class AuthController extends Controller
             }
 
             /* Update password if existed */
+            if(!$user->profile_photo_path) {
+                $user->profile_photo_path = $request->photoUrl;
+            }
+            
             $user->password = Hash::make($request->password);
             $user->email_verified_at = date("Y-m-d H:i:s");
             $user->save();
