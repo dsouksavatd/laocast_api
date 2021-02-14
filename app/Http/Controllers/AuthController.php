@@ -46,6 +46,10 @@ class AuthController extends Controller
      */
     private function coreAuth($email, $password, $device_brand, $push_token, $manufacturer, $model_name, $device_year, $os_name, $os_version, $os_build_id, $device_name, $method, $latitude, $longitude) {
 
+        
+
+        $API_KEY = Str::uuid();
+
         $postData = array(
             'client_id' => env("PASSPORT_CLIENT_ID"),
             'client_secret' => env("PASSPORT_CLIENT_SECRET"),
@@ -67,8 +71,7 @@ class AuthController extends Controller
             'latitude' => $latitude,
             'longitude' => $longitude
         );
-
-        $API_KEY = Str::uuid();
+        
         $curl = curl_init();
         curl_setopt_array($curl, array(
         CURLOPT_URL => env("CORE_URL")."oauth/token",
