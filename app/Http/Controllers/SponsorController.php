@@ -18,7 +18,8 @@ class SponsorController extends Controller
         app('translator')->setLocale($request->header('Content-Language'));
         $this->middleware('auth:api', [
             'except' => [
-                'index'
+                'index',
+                'sponsors'
             ]
         ]);
     }

@@ -31,7 +31,8 @@ class TrackController extends Controller
                 'findPublicComments',
                 'subscription',
                 'popular',
-                'search'
+                'search',
+                'category'
             ]
         ]);
     }
