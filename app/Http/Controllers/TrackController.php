@@ -337,6 +337,7 @@ class TrackController extends Controller
             WHERE track_comments.deleted_at IS NULL   
             AND track_comments.tracks_id = ".$trackId."
             ORDER BY id DESC
+            LIMIT 0,30
         ");
 
         return response()->json([
@@ -363,6 +364,7 @@ class TrackController extends Controller
             WHERE track_comments.deleted_at IS NULL   
             AND track_comments.tracks_id = ".$trackId."
             ORDER BY id DESC
+            LIMIT 0,30
         ");
 
         return response()->json([
