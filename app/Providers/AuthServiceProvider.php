@@ -38,7 +38,7 @@ class AuthServiceProvider extends ServiceProvider
             if ($request->header('Authorization')) {
                 
                 $key = explode(' ',$request->header('Authorization'));
-
+                $key = str_replace('"', "", $key);
                 $OauthAccessToken = OauthAccessTokens::where('api_key', $key[1])->first();
                 
                 if($OauthAccessToken) {

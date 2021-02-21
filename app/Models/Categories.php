@@ -22,4 +22,5 @@ class Categories extends Model
         return trans('app.categories.'.$value);
     }
 
+
 }

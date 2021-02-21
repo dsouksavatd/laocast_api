@@ -28,6 +28,7 @@ $router->get('/categories', ['uses' => 'CategoryController@index']);
  */
 $router->post('/signup', ['uses' => 'AuthController@signup']);
 $router->post('/signin', ['uses' => 'AuthController@signin']);
+$router->options('/signin', ['uses' => 'AuthController@signin']);
 $router->post('/signin/social', ['uses' => 'AuthController@signinSocial']);
 $router->post('/reset-password', ['uses' => 'AuthController@resetPassword']);
 $router->post('/password-reset', ['uses' => 'AuthController@passwordReset']);
@@ -84,3 +85,16 @@ $router->get('/sponsor/menu', ['uses' => 'SponsorController@index']);
  * Payment
  */
 $router->post('/op-gen', ['uses' => 'PaymentController@generateOnePayQrCode']);
+
+/**
+ * Caster
+ */
+$router->options('/caster/channels', function(){ return response('', 200); });
+
+$router->get('/caster/channels', ['uses' => 'CasterController@channels']);
+
+$router->options('/caster/tracks', function(){ return response('', 200); });
+$router->get('/caster/tracks', ['uses' => 'CasterController@tracks']);
+
+$router->options('/caster/comments', function(){ return response('', 200); });
+$router->get('/caster/comments', ['uses' => 'CasterController@comments']);
