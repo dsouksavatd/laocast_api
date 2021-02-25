@@ -428,7 +428,7 @@ class TrackController extends Controller
             $track->increment('comments');
 
             // Push Notify
-            $title = trans('app.push_notification.comment.title');
+           /*  $title = trans('app.push_notification.comment.title');
             $body = trans('app.push_notification.comment.body', [
                 'name' => Auth::user()->name,
                 'track' => $track->name
@@ -438,7 +438,7 @@ class TrackController extends Controller
                 'target_id' => $track->id,
                 'title' => $title,
                 'body' => $body
-            ], true);
+            ], true); */
 
             return response()->json([
                 'message' => 'comment has been saved',
@@ -487,7 +487,7 @@ class TrackController extends Controller
                 $track->increment('favorites');
 
                 // Push Notify
-                $title = trans('app.push_notification.favorite.title');
+                /* $title = trans('app.push_notification.favorite.title');
                 $body = trans('app.push_notification.favorite.body', [
                     'name' => Auth::user()->name,
                     'track' => $track->name
@@ -497,7 +497,7 @@ class TrackController extends Controller
                     'target_id' => $track->id,
                     'title' => $title,
                     'body' => $body
-                ], false);
+                ], false); */
 
             }
 
