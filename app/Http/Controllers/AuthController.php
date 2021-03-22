@@ -303,7 +303,7 @@ class AuthController extends Controller
             
             $user = User::where('email', $request->email)->first();
 
-            /* Check if user existed */
+            /* Check if not user existed */
             if(!$user) {
                 $user = new User();
                 $user->email = $request->email;
@@ -317,7 +317,7 @@ class AuthController extends Controller
                 $user->profile_photo_path = $request->photoUrl;
             }
             
-            $user->password = Hash::make($request->password);
+            //$user->password = Hash::make($request->password);
             $user->email_verified_at = date("Y-m-d H:i:s");
             $user->save();
 
