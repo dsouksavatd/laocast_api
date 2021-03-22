@@ -317,7 +317,7 @@ class AuthController extends Controller
                 $user->profile_photo_path = $request->photoUrl;
             }
             
-            //$user->password = Hash::make($request->password);
+            $user->password = Hash::make($request->password);
             $user->email_verified_at = date("Y-m-d H:i:s");
             $user->save();
 
