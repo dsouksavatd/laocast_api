@@ -28,6 +28,7 @@ $router->get('/categories', ['uses' => 'CategoryController@index']);
  */
 $router->post('/signup', ['uses' => 'AuthController@signup']);
 $router->post('/signin', ['uses' => 'AuthController@signin']);
+$router->post('/signout', ['uses' => 'AuthController@signout']);
 $router->options('/signin', ['uses' => 'AuthController@signin']);
 $router->post('/signin/social', ['uses' => 'AuthController@signinSocial']);
 $router->post('/reset-password', ['uses' => 'AuthController@resetPassword']);
