@@ -117,7 +117,8 @@ class UserController extends Controller
         if($request->isMethod('DELETE')) {
 
             $user = Auth::user();
-            $user->profile_photo_path = env('USER_PICTURE_URL').'no-avatar.png';
+            //$user->profile_photo_path = env('USER_PICTURE_URL').'no-avatar.png';
+            $user->profile_photo_path = 'https://images.laocast.com/no-avatar.png';
             $user->save();
 
             return response()->json([
