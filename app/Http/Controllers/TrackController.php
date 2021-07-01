@@ -446,6 +446,7 @@ class TrackController extends Controller
                 'message' => 'comment has been saved',
                 'comment' => [
                     'name' => $user->name,
+                    'avatar' => Auth::check() ? Auth::user()->profile_photo_path : "",
                     'profile_photo_path' => $user->profile_photo_path,
                     'comment' => $comment->comment,
                     'date' => $comment->created_at,
