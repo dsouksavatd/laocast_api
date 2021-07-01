@@ -225,6 +225,7 @@ class TrackController extends Controller
         
         if($comment) {
             $comment = [
+                'avatar' => Auth::check() ? Auth::user()->profile_photo_path : "",
                 'name' => $comment[0]->name,
                 'profile_photo_path' => $comment[0]->profile_photo_path,
                 'comment' => $comment[0]->comment,
@@ -233,6 +234,7 @@ class TrackController extends Controller
             ];
         } else {
             $comment = [
+                'avatar' => Auth::check() ? Auth::user()->profile_photo_path : "",
                 'name' => '',
                 'profile_photo_path' => '',
                 'comment' => 'no_comment',
