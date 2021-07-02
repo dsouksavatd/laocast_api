@@ -25,7 +25,7 @@ class PaymentController extends Controller
   
         $this->middleware('auth:api', [
             'except' => [
-                'onepayCheck'
+               
             ]
         ]);
     }
@@ -143,68 +143,77 @@ class PaymentController extends Controller
     /**
      * 
      */
-    public function onepayCheck($uuid) {
+    public function onepayCheck(Request $request) {
 
-        $curl = curl_init();
-        $mcid = env('BCEL_MCID');
+        if($request->isMethod('PATCH')) {
 
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://bcel.la:8083/onepay/gettransaction.php?mcid=".$mcid."&uuid=".$uuid,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-        ));
+            $curl = curl_init();
+            $mcid = env('BCEL_MCID');
+    
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://bcel.la:8083/onepay/gettransaction.php?mcid=".$mcid."&uuid=".$request->uuid,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+            ));
+    
+            $response = curl_exec($curl);
+            curl_close($curl);
+    
+            if(!$response) {
+                self::$MESSAGE = trans('app.messages.error.onepay');
+                self::$CODE = 422;
+                return response()->json([
+                    'uuid' => $uuid,
+                    'message' => self::$MESSAGE,
+                    'paymentSuccess' => false
+                ],self::$CODE); 
+            }
+    
+            //$notify = (boolean) $_GET['notify'];
+    
+            // Send push notification
+            /* if($notify) {
+                
+                $pushTokens = OauthAccessTokens::where('push_token' ,'!=', NULL)
+                                            ->where('user_id', Auth::id())
+                                            ->where('revoked', 0)
+                                            ->get();
+    
+                $expo = \ExponentPhpSDK\Expo::normalSetup();
+                $channelName = 'PaymentNotificationChannel';
+    
+                foreach($pushTokens as $token) {
+                    $expo->subscribe($channelName, $token->push_token);
+                    $notification = [
+                        'title' => "Payment Verification", 
+                        'body' =>'Your payment is under verifying'
+                    ];
+                }
+                $expo->notify([$channelName], $notification);
+            } */
+    
+            /* Update Payment reference */
+            $sponsor = Sponsors::where('uuid', $request->uuid)->first();
+            $sponsor->status = 1;
+            $sponsor->save();
 
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        if(!$response) {
-            self::$MESSAGE = trans('app.messages.error.onepay');
+            /* $orderBase = MshopOrderBase::find($baseOrderId);
+            $orderBase->customerref = "{uuid:".$uuid."}";
+            $orderBase->save(); */
+            
+            self::$MESSAGE = 'payment successful';
             return response()->json([
                 'uuid' => $uuid,
                 'message' => self::$MESSAGE,
-                'paymentSuccess' => false
+                'paymentSuccess' => true
             ],self::$CODE); 
+    
         }
-
-        //$notify = (boolean) $_GET['notify'];
-
-        // Send push notification
-        /* if($notify) {
-            
-            $pushTokens = OauthAccessTokens::where('push_token' ,'!=', NULL)
-                                        ->where('user_id', Auth::id())
-                                        ->where('revoked', 0)
-                                        ->get();
-
-            $expo = \ExponentPhpSDK\Expo::normalSetup();
-            $channelName = 'PaymentNotificationChannel';
-
-            foreach($pushTokens as $token) {
-                $expo->subscribe($channelName, $token->push_token);
-                $notification = [
-                    'title' => "Payment Verification", 
-                    'body' =>'Your payment is under verifying'
-                ];
-            }
-            $expo->notify([$channelName], $notification);
-        } */
-
-        /* Update Payment reference */
-        $orderBase = MshopOrderBase::find($baseOrderId);
-        $orderBase->customerref = "{uuid:".$uuid."}";
-        $orderBase->save();
-        
-        self::$MESSAGE = 'payment successful';
-        return response()->json([
-            'uuid' => $uuid,
-            'message' => self::$MESSAGE,
-            'paymentSuccess' => true
-        ],self::$CODE); 
-
+       
     }
 }
