@@ -25,7 +25,7 @@ class PaymentController extends Controller
   
         $this->middleware('auth:api', [
             'except' => [
-                //
+                'onepayCheck'
             ]
         ]);
     }
@@ -143,7 +143,7 @@ class PaymentController extends Controller
     /**
      * 
      */
-    public function onepayCheck($baseOrderId, $uuid) {
+    public function onepayCheck($uuid) {
 
         $curl = curl_init();
         $mcid = env('BCEL_MCID');

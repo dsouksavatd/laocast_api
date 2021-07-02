@@ -86,6 +86,7 @@ $router->get('/sponsor/menu', ['uses' => 'SponsorController@index']);
  * Payment
  */
 $router->post('/op-gen', ['uses' => 'PaymentController@generateOnePayQrCode']);
+$router->get('/sponsor/onepay/check/{uuid}', ['uses' => 'PaymentController@onepayCheck']);
 
 /**
  * Caster
