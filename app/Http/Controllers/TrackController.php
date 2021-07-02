@@ -225,6 +225,7 @@ class TrackController extends Controller
         
         $sponsors = app('db')->select("
             SELECT 
+            sponsors.id as id,
             users.name as name,
             users.profile_photo_path as imageUrl,
             sponsor_menus.title as title,
