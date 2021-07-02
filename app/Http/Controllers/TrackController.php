@@ -223,6 +223,22 @@ class TrackController extends Controller
             LIMIT 0,1
         ");
         
+        $sponsors = app('db')->select("
+            SELECT 
+            users.name as name,
+            users.profile_photo_path as avatar,
+            sponsor_menus.title as title,
+            sponsors.amount as amount,
+            sponsors.created_at as created_at
+            FROM sponsors
+            JOIN sponsor_menus ON sponsor_menus.id = sponsors.sponsor_menus_id
+            JOIN users ON users.id = sponsors.users_id
+            WHERE sponsors.channels_id = ".$track->channels_id."
+            AND status=1
+            ORDER BY sponsors.id DESC
+            LIMIT 0,5
+        ");
+
         if($comment) {
             $comment = [
                 'avatar' => Auth::check() ? Auth::user()->profile_photo_path : "",
@@ -230,7 +246,8 @@ class TrackController extends Controller
                 'profile_photo_path' => $comment[0]->profile_photo_path,
                 'comment' => $comment[0]->comment,
                 'date' => $comment[0]->created_at,
-                'total' => $track->comments
+                'total' => $track->comments,
+                'sponsors' => $sponsors,
             ];
         } else {
             $comment = [
@@ -239,6 +256,7 @@ class TrackController extends Controller
                 'profile_photo_path' => '',
                 'comment' => 'no_comment',
                 'date' => '',
+                'sponsors' => $sponsors,
                 'total' => 0
             ];
         }
