@@ -168,7 +168,7 @@ class PaymentController extends Controller
                 self::$MESSAGE = trans('app.messages.error.onepay');
                 self::$CODE = 422;
                 return response()->json([
-                    'uuid' => $rquest->uuid,
+                    'uuid' => $request->uuid,
                     'message' => self::$MESSAGE,
                     'paymentSuccess' => false
                 ],self::$CODE); 
