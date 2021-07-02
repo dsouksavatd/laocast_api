@@ -247,7 +247,6 @@ class TrackController extends Controller
                 'comment' => $comment[0]->comment,
                 'date' => $comment[0]->created_at,
                 'total' => $track->comments,
-                'sponsors' => $sponsors,
             ];
         } else {
             $comment = [
@@ -256,7 +255,6 @@ class TrackController extends Controller
                 'profile_photo_path' => '',
                 'comment' => 'no_comment',
                 'date' => '',
-                'sponsors' => $sponsors,
                 'total' => 0
             ];
         }
@@ -277,7 +275,8 @@ class TrackController extends Controller
                 'total' => count($playlist),
                 'data' => $playlist
             ],
-            'comment' => $comment
+            'comment' => $comment,
+            'sponsors' => $sponsors,
         ],self::$CODE);
     }
 
