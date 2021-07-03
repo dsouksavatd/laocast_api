@@ -184,7 +184,8 @@ class TrackController extends Controller
             channels.`name` as name,
             channels.image as image,
             channels.subscribers as subscribers,
-            channels.created_at as created_at
+            channels.created_at as created_at,
+            channels.shorten_url as shorten_url
             FROM channels
             WHERE channels.id = ".$track->channels_id."
             AND channels.deleted_at IS NULL
