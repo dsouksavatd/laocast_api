@@ -38,7 +38,7 @@ class TrackController extends Controller
 
         foreach(Tracks::get() as $track) {
             $track = Tracks::find($track->id);
-            $track->shorten_code = '123123';
+            $track->shorten_code = Tracks::generateRandomString();
             $track->save();
         }
     }
@@ -191,7 +191,7 @@ class TrackController extends Controller
             channels.image as image,
             channels.subscribers as subscribers,
             channels.created_at as created_at,
-            channels.shorten_url as shorten_url
+            channels.shorten_code as shorten_code
             FROM channels
             WHERE channels.id = ".$track->channels_id."
             AND channels.deleted_at IS NULL
