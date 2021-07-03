@@ -36,7 +36,7 @@ class TrackController extends Controller
             ]
         ]);
 
-        foreach(Tracks::get() as $track) {
+       /*  foreach(Tracks::get() as $track) {
             $track = Tracks::find($track->id);
             $track->shorten_code = Tracks::generateRandomString();
             $track->save();
@@ -46,7 +46,7 @@ class TrackController extends Controller
             $c = Channels::find($c->id);
             $c->shorten_code = Tracks::generateRandomString();
             $c->save();
-        }
+        } */
     }
     
     /**
