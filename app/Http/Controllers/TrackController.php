@@ -214,6 +214,7 @@ class TrackController extends Controller
             tracks.favorites as favorites,
             tracks.views as views,
             tracks.users_id as users_id,
+            tracks.shorten_code as shorten_code,
             tracks.created_at as created_at
             FROM tracks
             JOIN channels ON channels.id = tracks.channels_id
