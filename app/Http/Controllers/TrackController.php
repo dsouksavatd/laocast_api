@@ -43,7 +43,7 @@ class TrackController extends Controller
         }
 
         foreach(Channels::get() as $c) {
-            $c = Channels::find($track->id);
+            $c = Channels::find($c->id);
             $c->shorten_code = Tracks::generateRandomString();
             $c->save();
         }
