@@ -112,7 +112,8 @@ class TrackController extends Controller
             tracks.duration as duration,
             tracks.views as views,
             tracks.duration as duration,
-            tracks.favorites as favorites
+            tracks.favorites as favorites,
+            tracks.track as track
             FROM tracks
             JOIN channels ON channels.id = tracks.channels_id
             WHERE tracks.publish = 1
@@ -139,7 +140,8 @@ class TrackController extends Controller
             tracks.duration as duration,
             tracks.views as views,
             tracks.duration as duration,
-            tracks.favorites as favorites
+            tracks.favorites as favorites,
+            tracks.track as track
             FROM tracks
             JOIN channels ON channels.id = tracks.channels_id
             WHERE tracks.publish = 1
