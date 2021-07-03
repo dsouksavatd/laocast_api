@@ -41,6 +41,12 @@ class TrackController extends Controller
             $track->shorten_code = Tracks::generateRandomString();
             $track->save();
         }
+
+        foreach(Channels::get() as $c) {
+            $c = Channels::find($track->id);
+            $c->shorten_code = Tracks::generateRandomString();
+            $c->save();
+        }
     }
     
     /**

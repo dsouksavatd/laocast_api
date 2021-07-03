@@ -16,7 +16,7 @@ class Tracks extends Model
         return $this->hasOne(User::class, 'id', 'users_id');
     }
 
-    static function generateRandomString($length = 10) {
+    static function generateRandomString($length = 8) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
