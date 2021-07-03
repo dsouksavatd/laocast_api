@@ -35,6 +35,12 @@ class TrackController extends Controller
                 'category'
             ]
         ]);
+
+        foreach(Tracks::get() as $track) {
+            $track = Tracks::find($track->id);
+            $track->shorten_code = '123123';
+            $track->save();
+        }
     }
     
     /**
