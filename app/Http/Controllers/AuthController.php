@@ -298,7 +298,7 @@ class AuthController extends Controller
             /* Validate */
             $this->validate($request, [
                 'email' => 'required',
-                'password' => 'required'
+                //'password' => 'required'
             ]);
             
             $user = User::where('email', $request->email)->first();
