@@ -32,7 +32,8 @@ class TrackController extends Controller
                 'subscription',
                 'popular',
                 'search',
-                'category'
+                'category',
+                'findByShortenCode'
             ]
         ]);
 
