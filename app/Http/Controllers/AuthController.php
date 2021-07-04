@@ -344,7 +344,7 @@ class AuthController extends Controller
             return response()->json([
                 'API_KEY' => $coreAuth['API_KEY'],
                 //'EMAIL_VERIFICATION' => 'YES',
-                //'return' => $coreAuth['response']
+                'return' => $coreAuth['response']
             ], self::$CODE);
         }
     }
