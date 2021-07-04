@@ -37,6 +37,11 @@ $router->post('/email-verification-code/resend', ['uses' => 'AuthController@rese
 $router->patch('/email-verification', ['uses' => 'AuthController@emailVerification']);
 
 /**
+ * Deep Linking
+ */
+$router->get('/channel/find/{_shorten_code}', ['uses' => 'ChannelController@findByShortenCode']);
+
+/**
  * Tracks
  */
 $router->get('/track/recent/{_offset}/{_limit}', ['uses' => 'TrackController@recent']);

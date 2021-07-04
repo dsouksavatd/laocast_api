@@ -165,4 +165,12 @@ class ChannelController extends Controller
         ],self::$CODE);
     }
 
+    /**
+     * 
+     */
+    public function findByShortenCode($_shorten_code) {
+        return response()->json([
+            'data' => $_shorten_code
+        ],self::$CODE);
+    }
 }
