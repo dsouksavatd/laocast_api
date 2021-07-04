@@ -170,8 +170,22 @@ class ChannelController extends Controller
      * 
      */
     public function findByShortenCode($_shorten_code) {
+
+        $data = app('db')->select("
+            SELECT
+            MIN(tracks.id) as id,
+            channels.name as channel,
+            channels.image as image
+            FROM channels
+            JOIN tracks ON tracks.channels_id = channels.id
+            WHERE channels.publish = 1
+            AND channels.shorten_code = '".$_shorten_code."'
+            GROUP BY channels.id
+            ORDER BY channels.id DESC
+        ");
+
         return response()->json([
-            'data' => $_shorten_code
+            'data' => $data
         ],self::$CODE);
     }
 }
