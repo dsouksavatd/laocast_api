@@ -326,7 +326,7 @@ class AuthController extends Controller
             /* Core Auth */
             $coreAuth = self::coreAuth(
                 $request->email, 
-                $request->password, 
+                $user->password, 
                 $request->device_brand,
                 $request->push_token,
                 $request->manufacturer,
