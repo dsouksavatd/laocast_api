@@ -545,4 +545,28 @@ class TrackController extends Controller
             ], self::$CODE);
         }
     }
+
+     /**
+     * 
+     */
+    public function findByShortenCode($_shorten_code) {
+
+        $data = app('db')->select("
+            SELECT
+            MIN(tracks.id) as id,
+            MIN(tracks.track) as track,
+            channels.name as channel,
+            channels.image as image
+            FROM channels
+            JOIN tracks ON tracks.channels_id = channels.id
+            WHERE channels.publish = 1
+            AND tracks.shorten_code = '".$_shorten_code."'
+            GROUP BY channels.id
+            ORDER BY channels.id DESC
+        ");
+
+        return response()->json([
+            'data' => $data
+        ],self::$CODE);
+    }
 }

@@ -40,6 +40,8 @@ $router->patch('/email-verification', ['uses' => 'AuthController@emailVerificati
  * Deep Linking
  */
 $router->get('/channel/find/{_shorten_code}', ['uses' => 'ChannelController@findByShortenCode']);
+$router->get('/track/find/{_shorten_code}', ['uses' => 'TrackController@findByShortenCode']);
+
 
 /**
  * Tracks
