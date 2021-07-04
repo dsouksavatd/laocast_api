@@ -303,12 +303,14 @@ class AuthController extends Controller
             
             $user = User::where('email', $request->email)->first();
 
+            $password = (string) Str::uuid();
+
             /* Check if not user existed */
             if(!$user) {
                 $user = new User();
                 $user->email = $request->email;
                 $user->name = $request->name;
-                $user->password = Hash::make($request->password);
+                $user->password = Hash::make($password);
                 $user->save();
             }
 
@@ -317,7 +319,7 @@ class AuthController extends Controller
                 $user->profile_photo_path = $request->photoUrl;
             }
             
-            $user->password = Hash::make($request->password);
+            //$user->password = Hash::make($request->password);
             $user->email_verified_at = date("Y-m-d H:i:s");
             $user->save();
 
@@ -341,8 +343,8 @@ class AuthController extends Controller
             
             return response()->json([
                 'API_KEY' => $coreAuth['API_KEY'],
-                'EMAIL_VERIFICATION' => 'YES',
-                'return' => $coreAuth['response']
+                //'EMAIL_VERIFICATION' => 'YES',
+                //'return' => $coreAuth['response']
             ], self::$CODE);
         }
     }
