@@ -181,6 +181,7 @@ class TrackController extends Controller
             tracks.channels_id as channels_id,
             tracks.favorites as favorites,
             tracks.views as views,
+            tracks.shorten_code as shorten_code,
             tracks.comments as comments,
             tracks.users_id as users_id,
             tracks.created_at as created_at
