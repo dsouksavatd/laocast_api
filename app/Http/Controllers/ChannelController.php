@@ -174,6 +174,7 @@ class ChannelController extends Controller
         $data = app('db')->select("
             SELECT
             MIN(tracks.id) as id,
+            MIN(tracks.track) as track,
             channels.name as channel,
             channels.image as image
             FROM channels
