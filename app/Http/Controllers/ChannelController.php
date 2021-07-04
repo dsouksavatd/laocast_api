@@ -24,7 +24,8 @@ class ChannelController extends Controller
                 'index',
                 'popular',
                 'subscribers',
-                'recent'
+                'recent',
+                'findByShortenCode'
             ]
         ]);
     }
