@@ -319,14 +319,14 @@ class AuthController extends Controller
                 $user->profile_photo_path = $request->photoUrl;
             }
             
-            //$user->password = Hash::make($request->password);
+            $user->password = Hash::make($password);
             $user->email_verified_at = date("Y-m-d H:i:s");
             $user->save();
 
             /* Core Auth */
             $coreAuth = self::coreAuth(
                 $request->email, 
-                $user->password, 
+               $password, 
                 $request->device_brand,
                 $request->push_token,
                 $request->manufacturer,
