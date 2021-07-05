@@ -62,7 +62,7 @@ class ChannelController extends Controller
                 $channel->increment('subscribers');
 
                 // Push Notify
-                /* $title = trans('app.push_notification.subscribe.title');
+                $title = trans('app.push_notification.subscribe.title');
                 $body = trans('app.push_notification.subscribe.body', [
                     'name' => Auth::user()->name,
                     'channel' => $channel->name
@@ -72,7 +72,7 @@ class ChannelController extends Controller
                     'target_id' => $channel->id,
                     'title' => $title,
                     'body' => $body
-                ], false); */
+                ], false);
             }
 
             return response()->json([
