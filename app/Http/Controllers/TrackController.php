@@ -438,13 +438,13 @@ class TrackController extends Controller
 
         $data = app('db')->select("
             SELECT
-            MAX(tracks.id) as id,
-            MAX(tracks.name) as name,
-            MAX(tracks.duration) as duration,
-            MAX(tracks.views) as views,
-            MAX(tracks.duration) as duration,
-            MAX(tracks.favorites) as favorites,
-            MAX(tracks.track) as track,
+            MIN(tracks.id) as id,
+            MIN(tracks.name) as name,
+            MIN(tracks.duration) as duration,
+            MIN(tracks.views) as views,
+            MIN(tracks.duration) as duration,
+            MIN(tracks.favorites) as favorites,
+            MIN(tracks.track) as track,
             channels.name as channel,
             channels.image as image
             FROM channels
