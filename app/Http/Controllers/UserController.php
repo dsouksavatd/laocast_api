@@ -314,7 +314,7 @@ class UserController extends Controller
         );
 
         return response()->json([
-            'notifications' => $notifications['notifications'],
+            'notifications' => $notifications,
             'userNotification' => Auth::user()->notification,
             'data' => $data
         ], self::$CODE);
