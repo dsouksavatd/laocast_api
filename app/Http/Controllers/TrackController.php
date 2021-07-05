@@ -448,11 +448,11 @@ class TrackController extends Controller
             channels.name as channel,
             channels.image as image,
             channels.subscribers as subscribers,
-            channels.tracks as tracks
+            channels.tracks as totalTracks
             FROM channels
             JOIN tracks ON tracks.channels_id = channels.id
             WHERE channels.categories_id = ".$_id."
-            GROUP BY channel, image, channels.id, subscribers, tracks
+            GROUP BY channel, image, channels.id, subscribers, totalTracks
             ORDER BY channels.id DESC
             LIMIT ".$_offset.", ".$_limit."
         ");
