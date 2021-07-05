@@ -162,7 +162,6 @@ class TrackController extends Controller
             AND tracks.deleted_at IS NULL
             AND tracks.name LIKE '%".$_keyword."%'
             ORDER BY tracks.views DESC
-            LIMIT ".$_offset.", ".$_limit."
         ");
         return response()->json([
             'data' => $data
