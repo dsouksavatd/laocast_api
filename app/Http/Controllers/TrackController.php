@@ -145,6 +145,8 @@ class TrackController extends Controller
      */
     public function search($_keyword, $_offset, $_limit) {
 
+        dump($_keyword);
+        exit();
         $data = app('db')->select("
             SELECT
             tracks.id as id,
