@@ -143,9 +143,9 @@ class TrackController extends Controller
     /**
      * 
      */
-    public function search($_keyword, $_offset, $_limit) {
+    public function search(Request $request) {
 
-        dump($_keyword);
+        dump($request->input('keyword'));
         exit();
         $data = app('db')->select("
             SELECT

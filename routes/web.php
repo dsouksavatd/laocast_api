@@ -54,7 +54,7 @@ $router->get('/track/public/comments/find/{trackId}', ['uses' => 'TrackControlle
 $router->get('/track/comments/find/{trackId}', ['uses' => 'TrackController@findComments']);
 $router->post('/track/comment/post', ['uses' => 'TrackController@postComment']);
 $router->patch('/track/favorite', ['uses' => 'TrackController@favorite']);
-$router->get('/track/search/{_keyword}/{_offset}/{_limit}', ['uses' => 'TrackController@search']);
+$router->get('/track/search', ['uses' => 'TrackController@search']);
 $router->get('/track/category/{_id}/{_offset}/{_limit}', ['uses' => 'TrackController@category']);
 
 
