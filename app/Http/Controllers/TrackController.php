@@ -444,6 +444,7 @@ class TrackController extends Controller
             MAX(tracks.views) as views,
             MAX(tracks.duration) as duration,
             MAX(tracks.favorites) as favorites,
+            MAX(tracks.track) as track,
             channels.name as channel,
             channels.image as image
             FROM channels
