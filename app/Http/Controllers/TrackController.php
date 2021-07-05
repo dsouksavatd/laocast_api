@@ -145,8 +145,6 @@ class TrackController extends Controller
      */
     public function search(Request $request) {
 
-        dump($request->input('keyword'));
-        exit();
         $data = app('db')->select("
             SELECT
             tracks.id as id,
@@ -162,8 +160,9 @@ class TrackController extends Controller
             JOIN channels ON channels.id = tracks.channels_id
             WHERE tracks.publish = 1
             AND tracks.deleted_at IS NULL
-            AND tracks.name LIKE '%".$_keyword."%'
+            AND tracks.name LIKE '%".$request->input('keyword')."%'
             ORDER BY tracks.views DESC
+            LIMIT ".$request->input('offset').", ".$request->input('limit')."
         ");
         return response()->json([
             'data' => $data
