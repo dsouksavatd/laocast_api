@@ -489,17 +489,24 @@ class TrackController extends Controller
             $track->increment('comments');
 
             // Push Notify
-           /*  $title = trans('app.push_notification.comment.title');
+            $title = trans('app.push_notification.comment.title');
             $body = trans('app.push_notification.comment.body', [
                 'name' => Auth::user()->name,
                 'track' => $track->name
             ]);
+
+            // find channel
+            $channel = Channels::find($track->channels_id);
+            
             $track->User->pushNotify([
                 'type' => 'comment',
                 'target_id' => $track->id,
                 'title' => $title,
-                'body' => $body
-            ], true); */
+                'body' => $body,
+                'tracks_id' => $track->id,
+                'track' => $track->track,
+                'cover' => $channel->image
+            ], true);
 
             return response()->json([
                 'message' => 'comment has been saved',
