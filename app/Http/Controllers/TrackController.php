@@ -160,7 +160,7 @@ class TrackController extends Controller
             JOIN channels ON channels.id = tracks.channels_id
             WHERE tracks.publish = 1
             AND tracks.deleted_at IS NULL
-            AND tracks.keywords LIKE '%".$_keyword."%'
+            AND tracks.name LIKE '%".$_keyword."%'
             ORDER BY tracks.views DESC
             LIMIT ".$_offset.", ".$_limit."
         ");
