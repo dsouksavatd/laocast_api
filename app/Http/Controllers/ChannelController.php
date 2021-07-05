@@ -67,11 +67,17 @@ class ChannelController extends Controller
                     'name' => Auth::user()->name,
                     'channel' => $channel->name
                 ]);
+
+                // find track
+                $track = Tracks::where('channels_id', $channel->id)->first();
+
                 $channel->User->pushNotify([
                     'type' => 'subscribe',
                     'target_id' => $channel->id,
                     'title' => $title,
-                    'body' => $body
+                    'body' => $body,
+                    'tracks_id' => $track->id,
+                    'track' => $track->track
                 ], false);
             }
 
