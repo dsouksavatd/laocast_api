@@ -304,7 +304,17 @@ class UserController extends Controller
             ORDER BY notifications.created_at DESC
         ");
 
+        $notifications = app('db')->select("
+            SELECT
+            COUNT(notifications.id) notifications
+            FROM notifications
+            JOIN users ON users.id = notifications.users_id
+            WHERE notifications.users_id = ".Auth::id()."
+            AND notifications.read = 0"
+        );
+
         return response()->json([
+            'notifications' => $notifications,
             'userNotification' => Auth::user()->notification,
             'data' => $data
         ], self::$CODE);
