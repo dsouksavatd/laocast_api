@@ -82,6 +82,7 @@ $router->patch('/notification-update', ['uses' => 'UserController@notificationUp
 $router->patch('/notification/mark-as-read', ['uses' => 'UserController@notificationMarkAsRead']);
 $router->delete('/notification/clear', ['uses' => 'UserController@notificationClear']);
 $router->patch('/notification/offon', ['uses' => 'UserController@notificationOffon']);
+$router->get('/notification/count', ['uses' => 'UserController@notificationCount']);
 
 /**
  * Sponsor

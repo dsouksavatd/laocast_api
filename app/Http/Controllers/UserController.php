@@ -290,6 +290,25 @@ class UserController extends Controller
     /**
      * 
      */
+    public function notificationCount() {
+
+        $notifications = app('db')->select("
+            SELECT
+            COUNT(notifications.id) as notifications
+            FROM notifications
+            JOIN users ON users.id = notifications.users_id
+            WHERE notifications.users_id = ".Auth::id()."
+            AND notifications.read = 0"
+        );
+
+        return response()->json([
+            'notifications' => $notifications[0]->notifications,
+        ], self::$CODE);
+    }
+
+    /**
+     * 
+     */
     public function notifications() {
         $data  = app('db')->select("
             SELECT
