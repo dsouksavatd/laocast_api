@@ -306,7 +306,7 @@ class UserController extends Controller
 
         $notifications = app('db')->select("
             SELECT
-            COUNT(notifications.id) notifications
+            COUNT(notifications.id) as notifications
             FROM notifications
             JOIN users ON users.id = notifications.users_id
             WHERE notifications.users_id = ".Auth::id()."
