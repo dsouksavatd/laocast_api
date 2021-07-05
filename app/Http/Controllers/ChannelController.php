@@ -70,7 +70,7 @@ class ChannelController extends Controller
                 ]);
 
                 // find track
-                $track = Tracks::where('channels_id', $channel->id)->first();
+                $track = Tracks::where('channels_id', $request->channels_id)->first();
 
                 $channel->User->pushNotify([
                     'type' => 'subscribe',
