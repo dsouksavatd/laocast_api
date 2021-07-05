@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Subscribers;
 use App\Models\Channels;
 use Auth;
+use App\Models\Tracks;
 
 class ChannelController extends Controller
 {
