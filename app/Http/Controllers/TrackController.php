@@ -417,7 +417,7 @@ class TrackController extends Controller
      */
     public function category($_id, $_offset, $_limit) {
 
-        $data = app('db')->select("
+ /*        $data = app('db')->select("
             SELECT
             tracks.id as id,
             channels.name as channel,
@@ -434,7 +434,25 @@ class TrackController extends Controller
             AND tracks.deleted_at IS NULL
             ORDER BY tracks.id DESC
             LIMIT ".$_offset.", ".$_limit."
+        "); */
+
+        $data = app('db')->select("
+            SELECT
+            MAX(tracks.id) as id,
+            MAX(tracks.name) as name,
+            MAX(tracks.duration) as duration,
+            MAX(tracks.views) as views,
+            MAX(tracks.duration) as duration,
+            tracks.favorites as favorites,
+            channels.name as channel,
+            channels.image as image
+            FROM channels
+            JOIN tracks ON tracks.channels_id = channels.id
+            WHERE channels.categories_id = ".$_id."
+            ORDER BY channels.id DESC
+            LIMIT ".$_offset.", ".$_limit."
         ");
+        
         return response()->json([
             'data' => $data
         ],self::$CODE);
