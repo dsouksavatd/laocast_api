@@ -448,7 +448,7 @@ class TrackController extends Controller
             channels.name as channel,
             channels.image as image,
             channels.subscribers as subscribers,
-            channels.tracks as totalTracks
+            COUNT(tracks.id) as totalTracks
             FROM channels
             JOIN tracks ON tracks.channels_id = channels.id
             WHERE channels.categories_id = ".$_id."
