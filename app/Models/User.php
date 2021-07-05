@@ -65,7 +65,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
                 'description' => $param['body'],
                 'target_id' => $param['target_id'],
                 'tracks_id' => $param['tracks_id'],
-                'track' => $param['track']
+                'track' => $param['track'],
+                'cover' => $param['cover']
             ],JSON_UNESCAPED_SLASHES);
             $notify->save();
            

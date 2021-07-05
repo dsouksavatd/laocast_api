@@ -78,7 +78,8 @@ class ChannelController extends Controller
                     'title' => $title,
                     'body' => $body,
                     'tracks_id' => $track->id,
-                    'track' => $track->track
+                    'track' => $track->track,
+                    'cover' => $channel->image
                 ], false);
             }
 
