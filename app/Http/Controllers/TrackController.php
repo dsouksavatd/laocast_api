@@ -92,6 +92,7 @@ class TrackController extends Controller
                 tracks.name as name,
                 tracks.duration as duration,
                 tracks.views as views,
+                tracks.track as track,
                 tracks.duration as duration,
                 tracks.favorites as favorites
                 FROM tracks
