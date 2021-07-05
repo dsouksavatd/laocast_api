@@ -316,7 +316,7 @@ class AuthController extends Controller
 
             /* Update password if existed */
             if(!$user->profile_photo_path) {
-                $user->profile_photo_path = $request->photoUrl;
+                $user->profile_photo_path = $request->photoUrl ? $rquest->photoUrl : "https://images.laocast.com/no-avatar.png";
             }
             
             $user->password = Hash::make($password);
