@@ -188,8 +188,8 @@ class ChannelController extends Controller
             channels.name as channel,
             channels.subscribers as subscribers,
             channels.image as image,
-            tracks.name) as `name`,
-            tracks.track) as track,
+            tracks.name as `name`,
+            tracks.track as track,
             tracks.duration as duration,
             tracks.id as totalTracks
             FROM tracks
