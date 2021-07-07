@@ -184,14 +184,14 @@ class ChannelController extends Controller
 
         $data = app('db')->select("
             SELECT
-            MIN(tracks.id) as id,
+            tracks.id as id,
             channels.name as channel,
             channels.subscribers as subscribers,
             channels.image as image,
-            MIN(tracks.name) as `name`,
-            MIN(tracks.track) as track,
-            MIN(tracks.duration) as duration,
-            COUNT(tracks.id) as totalTracks
+            tracks.name) as `name`,
+            tracks.track) as track,
+            tracks.duration as duration,
+            tracks.id as totalTracks
             FROM channels
             JOIN tracks ON tracks.channels_id = channels.id
             WHERE channels.publish = 1
