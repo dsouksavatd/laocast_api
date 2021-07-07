@@ -65,7 +65,7 @@ $router->patch('/channel/subscribe', ['uses' => 'ChannelController@subscribe']);
 $router->get('/subscribers/{channels_id}', ['uses' => 'ChannelController@subscribers']);
 $router->get('/channel/popular/{_offset}/{_limit}', ['uses' => 'ChannelController@popular']);
 $router->get('/channel/recent/{_offset}/{_limit}', ['uses' => 'ChannelController@recent']);
-$router->get('/channel/tracks/{_channels_id}', ['uses' => 'ChannelController@recent']);
+$router->get('/channel/tracks/{_channels_id}', ['uses' => 'ChannelController@trackByChannelsId']);
 
 /**
  * User
