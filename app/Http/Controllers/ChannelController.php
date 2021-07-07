@@ -196,7 +196,7 @@ class ChannelController extends Controller
             JOIN tracks ON tracks.channels_id = channels.id
             WHERE channels.publish = 1
             AND channels.id = ".$_channels_id."
-            ORDER BY channels.id DESC
+            ORDER BY tracks.id DESC
         ");
         return response()->json([
             'data' => $data
