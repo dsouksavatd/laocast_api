@@ -180,7 +180,7 @@ class ChannelController extends Controller
     /**
      * 
      */
-    public function trackByChannelsId($channels_id) {
+    public function trackByChannelsId($_channels_id) {
 
         $data = app('db')->select("
             SELECT
@@ -195,7 +195,7 @@ class ChannelController extends Controller
             FROM channels
             JOIN tracks ON tracks.channels_id = channels.id
             WHERE channels.publish = 1
-            AND channels.id = ".$channels_id."
+            AND channels.id = ".$_channels_id."
             GROUP BY channels.id
             ORDER BY channels.id DESC
         ");
