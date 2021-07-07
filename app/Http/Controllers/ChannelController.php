@@ -129,6 +129,7 @@ class ChannelController extends Controller
             SELECT
             MIN(tracks.id) as id,
             channels.name as channel,
+            channels.id as channels_id,
             channels.subscribers as subscribers,
             channels.image as image,
             MIN(tracks.name) as `name`,
@@ -155,6 +156,7 @@ class ChannelController extends Controller
         $data = app('db')->select("
             SELECT
             MIN(tracks.id) as id,
+            channels.id as channels_id,
             channels.name as channel,
             channels.subscribers as subscribers,
             channels.image as image,
@@ -168,6 +170,33 @@ class ChannelController extends Controller
             GROUP BY channels.id
             ORDER BY channels.id DESC
             LIMIT ".$_offset.",".$_limit."
+        ");
+        return response()->json([
+            'data' => $data
+        ],self::$CODE);
+    }
+
+    /**
+     * 
+     */
+    public function trackByChannelsId($channels_id) {
+
+        $data = app('db')->select("
+            SELECT
+            MIN(tracks.id) as id,
+            channels.name as channel,
+            channels.subscribers as subscribers,
+            channels.image as image,
+            MIN(tracks.name) as `name`,
+            MIN(tracks.track) as track,
+            MIN(tracks.duration) as duration,
+            COUNT(tracks.id) as totalTracks
+            FROM channels
+            JOIN tracks ON tracks.channels_id = channels.id
+            WHERE channels.publish = 1
+            AND channels.id = ".$channels_id."
+            GROUP BY channels.id
+            ORDER BY channels.id DESC
         ");
         return response()->json([
             'data' => $data
