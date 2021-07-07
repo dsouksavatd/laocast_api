@@ -192,9 +192,10 @@ class ChannelController extends Controller
             tracks.track) as track,
             tracks.duration as duration,
             tracks.id as totalTracks
-            FROM channels
-            JOIN tracks ON tracks.channels_id = channels.id
+            FROM tracks
+            JOIN channels ON tracks.channels_id = channels.id
             WHERE channels.publish = 1
+            AND tracks.publish = 1
             AND channels.id = ".$_channels_id."
             ORDER BY tracks.id DESC
         ");
