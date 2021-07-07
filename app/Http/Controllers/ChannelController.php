@@ -26,7 +26,8 @@ class ChannelController extends Controller
                 'popular',
                 'subscribers',
                 'recent',
-                'findByShortenCode'
+                'findByShortenCode',
+                'trackByChannelsId'
             ]
         ]);
     }
