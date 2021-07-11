@@ -21,7 +21,11 @@ return [
         'science' => 'Science',
         'health_and_fitness' => 'Health & Fitness',
         'society_and_culture' => 'Society & Culture',
-        'kids_and_family' => 'Kids & Familty'
+        'kids_and_family' => 'Kids & Familty',
+        'vientiane_capital' => 'ນະຄອນຫລວງວຽງຈັນ',
+        'luang_prabang' => 'ຫລວງພະບາງ',
+        'xiangkhouang' => 'ຊຽງຂວາງ',
+        'champasack' => 'ຈຳປາສັກ'
     ],
 
     /** 
